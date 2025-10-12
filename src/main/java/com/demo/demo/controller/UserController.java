@@ -1,15 +1,18 @@
 package com.demo.demo.controller;
 
+import com.demo.demo.entities.UserEntity;
+import com.demo.demo.interfaces.UserInterface;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
 @RestController
 @RequestMapping("user")
 public class UserController {
+    @Autowired
+    UserInterface userInterface;
     @GetMapping("afficher")
     public String user(){
         return " Hey user";
@@ -39,4 +42,54 @@ public class UserController {
         user.put("users1",users1);
     return ResponseEntity.ok(user);
         }
+   @PostMapping("add")
+   public UserEntity addUser(@RequestBody  UserEntity user){
+        return userInterface.adduser(user);
+   }
+   @DeleteMapping("delete/{id}")
+    public void deleteUser(@PathVariable Long id){
+        userInterface.deleteUser(id);
+   }
+   @DeleteMapping("delete")
+    public String deleteUserz(@RequestParam("a") Long id){
+        userInterface.deleteUser(id);
+        return "user deleted";
+   }
+   @PostMapping("saveall")
+    public List<UserEntity> addListUsers(@RequestBody List<UserEntity> users){
+        return userInterface.addListUsers(users);
+   }
+   @PostMapping("addwithconfpassword")
+    public String addUserWithConfPassword(@RequestBody UserEntity user){
+        return userInterface.addUserWTCP(user);
+   }
+   @PostMapping("addWTUN")
+    public String adduserWTUN(@RequestBody UserEntity user){
+        return userInterface.addUserWTUN(user);
+   }
+   @PutMapping("updateuser/{id}")
+    public UserEntity updateuser(@PathVariable Long id, @ RequestBody UserEntity user){
+        return userInterface.UpdateUser(user,id);
+   }
+   @GetMapping("all")
+    public List<UserEntity> getAllUsers(){
+        return userInterface.getAllUsers();
+   }
+   @GetMapping("findbyid/{id}")
+    public UserEntity getUserById(@PathVariable Long id){
+        return userInterface.getUserById(id);
+   }
+   @GetMapping("findbyusername/{abc}")
+    public UserEntity getUserByUsername(@PathVariable("abc") String un){
+        return userInterface.getUserByUsername(un);
+
+   }
+   @GetMapping("getuserswt/{cle}")
+    public List<UserEntity> getUsersw(@PathVariable String cle){
+        return userInterface.getUserSWT(cle);
+   }
+   @GetMapping("getuserbyemaildomaine")
+    public List<UserEntity> getuserbyemaildomaine(@RequestParam String email){
+        return userInterface.getUserByEmail(email);
+   }
 }
