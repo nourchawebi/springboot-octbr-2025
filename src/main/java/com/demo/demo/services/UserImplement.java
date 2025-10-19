@@ -1,7 +1,10 @@
 package com.demo.demo.services;
 
+import com.demo.demo.entities.Role;
+import com.demo.demo.entities.RoleName;
 import com.demo.demo.entities.UserEntity;
 import com.demo.demo.interfaces.UserInterface;
+import com.demo.demo.repository.RoleRepo;
 import com.demo.demo.repository.UserRepo;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,8 @@ import java.util.Optional;
 public class UserImplement implements UserInterface {
     @Autowired
     UserRepo userRepo;
+    @Autowired
+    RoleRepo roleRepo;
     @Override
     public UserEntity adduser(UserEntity user) {
 
@@ -90,5 +95,21 @@ public class UserImplement implements UserInterface {
     @Override
     public List<UserEntity> getUserByEmail(String email) {
         return  userRepo.findbydomaine(email);
+    }
+
+    @Override
+    public UserEntity addusserwithrle(UserEntity user, RoleName roleName) {
+        Optional<Role> optionalRole= roleRepo.findByRolename(roleName);
+        Role role= optionalRole.orElseGet(
+                ()->{
+                    Role r=new Role();
+                    r.setRolename(roleName);
+                    return roleRepo.save(r);
+
+                }
+        );
+        user.setRole(role);
+        return userRepo.save(user);
+
     }
 }

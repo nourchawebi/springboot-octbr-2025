@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -24,6 +25,6 @@ public class Role {
     private List<UserEntity> users= new ArrayList<>();
     @Override
      public int hashCode() {
-        return rolename !=null ?rolename.hashCode(): 0;
+        return Objects.hashCode(rolename);
     }
 }
